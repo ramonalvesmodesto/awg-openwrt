@@ -5,12 +5,12 @@
 #Репозиторий OpenWRT должен быть доступен для установки зависимостей пакета kmod-amneziawg
 check_repo() {
     printf "\033[32;1mChecking OpenWrt repo availability...\033[0m\n"
-    opkg update | grep -q "Failed to download" && printf "\033[32;1mopkg failed. Check internet or date. Command for force ntp sync: ntpd -p ptbtime1.ptb.de\033[0m\n" && exit 1
+    apk update | grep -q "Failed to download" && printf "\033[32;1mopkg failed. Check internet or date. Command for force ntp sync: ntpd -p ptbtime1.ptb.de\033[0m\n" && exit 1
 }
 
 install_awg_packages() {
     # Получение pkgarch с наибольшим приоритетом
-    PKGARCH=$(opkg print-architecture | awk 'BEGIN {max=0} {if ($3 > max) {max = $3; arch = $2}} END {print arch}')
+    PKGARCH=$(apk --print-arch | awk 'BEGIN {max=0} {if ($3 > max) {max = $3; arch = $2}} END {print arch}')
 
     TARGET=$(ubus call system board | jsonfilter -e '@.release.target' | cut -d '/' -f 1)
     SUBTARGET=$(ubus call system board | jsonfilter -e '@.release.target' | cut -d '/' -f 2)
@@ -39,7 +39,7 @@ install_awg_packages() {
     AWG_DIR="/tmp/amneziawg"
     mkdir -p "$AWG_DIR"
     
-    if opkg list-installed | grep -q kmod-amneziawg; then
+    if apk list --installed | cut -f 1 -d ' ' | grep -q kmod-amneziawg; then
         echo "kmod-amneziawg already installed"
     else
         KMOD_AMNEZIAWG_FILENAME="kmod-amneziawg${PKGPOSTFIX}"
@@ -53,7 +53,7 @@ install_awg_packages() {
             exit 1
         fi
         
-        opkg install "$AWG_DIR/$KMOD_AMNEZIAWG_FILENAME"
+        apk add "$AWG_DIR/$KMOD_AMNEZIAWG_FILENAME"
 
         if [ $? -eq 0 ]; then
             echo "kmod-amneziawg installed successfully"
@@ -63,7 +63,7 @@ install_awg_packages() {
         fi
     fi
 
-    if opkg list-installed | grep -q amneziawg-tools; then
+    if apk list --installed | cut -f 1 -d ' ' | grep -q amneziawg-tools; then
         echo "amneziawg-tools already installed"
     else
         AMNEZIAWG_TOOLS_FILENAME="amneziawg-tools${PKGPOSTFIX}"
@@ -77,7 +77,7 @@ install_awg_packages() {
             exit 1
         fi
 
-        opkg install "$AWG_DIR/$AMNEZIAWG_TOOLS_FILENAME"
+        apk add "$AWG_DIR/$AMNEZIAWG_TOOLS_FILENAME"
 
         if [ $? -eq 0 ]; then
             echo "amneziawg-tools installed successfully"
@@ -88,7 +88,7 @@ install_awg_packages() {
     fi
     
     # Проверяем оба возможных названия пакета
-    if opkg list-installed | grep -q "luci-proto-amneziawg\|luci-app-amneziawg"; then
+    if apk list --installed | cut -f 1 -d ' ' | grep -q "luci-proto-amneziawg\|luci-app-amneziawg"; then
         echo "$LUCI_PACKAGE_NAME already installed"
     else
         LUCI_AMNEZIAWG_FILENAME="${LUCI_PACKAGE_NAME}${PKGPOSTFIX}"
@@ -102,7 +102,7 @@ install_awg_packages() {
             exit 1
         fi
 
-        opkg install "$AWG_DIR/$LUCI_AMNEZIAWG_FILENAME"
+        apk add "$AWG_DIR/$LUCI_AMNEZIAWG_FILENAME"
 
         if [ $? -eq 0 ]; then
             echo "$LUCI_PACKAGE_NAME installed successfully"
@@ -119,7 +119,7 @@ install_awg_packages() {
         INSTALL_RU_LANG=${INSTALL_RU_LANG:-n}
 
         if [ "$INSTALL_RU_LANG" = "y" ] || [ "$INSTALL_RU_LANG" = "Y" ]; then
-            if opkg list-installed | grep -q luci-i18n-amneziawg-ru; then
+            if apk list --installed | cut -f 1 -d ' ' | grep -q luci-i18n-amneziawg-ru; then
                 echo "luci-i18n-amneziawg-ru already installed"
             else
                 LUCI_I18N_AMNEZIAWG_RU_FILENAME="luci-i18n-amneziawg-ru${PKGPOSTFIX}"
@@ -128,7 +128,7 @@ install_awg_packages() {
 
                 if [ $? -eq 0 ]; then
                     echo "luci-i18n-amneziawg-ru file downloaded successfully"
-                    opkg install "$AWG_DIR/$LUCI_I18N_AMNEZIAWG_RU_FILENAME"
+                    apk add "$AWG_DIR/$LUCI_I18N_AMNEZIAWG_RU_FILENAME"
                     if [ $? -eq 0 ]; then
                         echo "luci-i18n-amneziawg-ru installed successfully"
                     else
