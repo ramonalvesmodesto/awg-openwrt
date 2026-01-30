@@ -15,7 +15,7 @@ install_awg_packages() {
     TARGET=$(ubus call system board | jsonfilter -e '@.release.target' | cut -d '/' -f 1)
     SUBTARGET=$(ubus call system board | jsonfilter -e '@.release.target' | cut -d '/' -f 2)
     VERSION=$(ubus call system board | jsonfilter -e '@.release.version')
-    PKGPOSTFIX="_v${VERSION}_${PKGARCH}_${TARGET}_${SUBTARGET}.ipk"
+    PKGPOSTFIX="${PKGARCH}_${TARGET}_${SUBTARGET}.apk"
     BASE_URL="https://github.com/ramonalvesmodesto/awg-openwrt/releases/download/"
 
     # Определяем версию AWG протокола (2.0 для OpenWRT >= 23.05.6 и >= 24.10.3)
@@ -42,7 +42,7 @@ install_awg_packages() {
     if apk list --installed | cut -f 1 -d ' ' | grep -q kmod-amneziawg; then
         echo "kmod-amneziawg already installed"
     else
-        KMOD_AMNEZIAWG_FILENAME="kmod-amneziawg${PKGPOSTFIX}"
+        KMOD_AMNEZIAWG_FILENAME="kmod-amneziawg-6.12.66.1.0.20251104-r1.apk"
         DOWNLOAD_URL="${BASE_URL}v${VERSION}/${KMOD_AMNEZIAWG_FILENAME}"
         wget -O "$AWG_DIR/$KMOD_AMNEZIAWG_FILENAME" "$DOWNLOAD_URL"
 
