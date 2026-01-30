@@ -200,7 +200,6 @@ jobs:
           postfix="v${{ matrix.build_env.tag }}_${{ matrix.build_env.pkgarch}}_${{ matrix.build_env.target}}_${{ matrix.build_env.subtarget}}"
           
           # Copy built packages
-          cd openwrt-sdk-25.12.0-rc3-mediatek-filogic_gcc-14.3.0_musl.Linux-x86_64
           file1=$(find * -name "amneziawg-tools-*.apk") 
           file2=$(find * -name "luci-proto-amneziawg-*.apk")
           file3=$(find * -name "luci-i18n-amneziawg-ru-*.apk")
