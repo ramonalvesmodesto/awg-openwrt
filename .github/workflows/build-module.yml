@@ -200,10 +200,16 @@ jobs:
           postfix="v${{ matrix.build_env.tag }}_${{ matrix.build_env.pkgarch}}_${{ matrix.build_env.target}}_${{ matrix.build_env.subtarget}}"
           
           # Copy built packages
-          find * -name "amneziawg-tools_*.apk" -exec cp {} awgrelease/amneziawg-tools_${postfix}.apk \; || echo "amneziawg-tools package not found"
-          find * -name "luci-proto-amneziawg_*.apk" -exec cp {} awgrelease/luci-proto-amneziawg_${postfix}.apk \; || echo "luci-proto-amneziawg package not found"
-          find * -name "luci-i18n-amneziawg-ru_*.apk" -exec cp {} awgrelease/luci-i18n-amneziawg-ru_${postfix}.apk \; || echo "luci-i18n-amneziawg-ru package not found"
-          find * -name "kmod-amneziawg_*.apk" -exec cp {} awgrelease/kmod-amneziawg_${postfix}.apk \; || echo "kmod-amneziawg package not found"
+          cd openwrt-sdk-25.12.0-rc3-mediatek-filogic_gcc-14.3.0_musl.Linux-x86_64
+          file1=$(find * -name "amneziawg-tools-*.apk") 
+          file2=$(find * -name "luci-proto-amneziawg-*.apk")
+          file3=$(find * -name "luci-i18n-amneziawg-ru-*.apk")
+          file4=$(find * -name "kmod-amneziawg-*.apk")
+
+          cp $file1 awgrelease/ || echo "amneziawg-tools package not found"
+          cp $file2 awgrelease/ || echo "amneziawg-tools package not found"
+          cp $file3 awgrelease/ || echo "amneziawg-tools package not found"
+          cp $file4 awgrelease/ || echo "amneziawg-tools package not found"
           
           echo "Built packages:"
           ls -la awgrelease/
