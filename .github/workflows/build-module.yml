@@ -151,12 +151,15 @@ jobs:
           cp -r "$WORKSPACE_DIR/kmod-amneziawg" package/
           cp -r "$WORKSPACE_DIR/amneziawg-tools" package/
           cp -r "$WORKSPACE_DIR/luci-proto-amneziawg" package/
+          cp -r "$WORKSPACE_DIR/byedpi" package/
+
           
           # Configure packages to build
           echo "CONFIG_PACKAGE_kmod-amneziawg=m" > .config
           echo "CONFIG_PACKAGE_amneziawg-tools=y" >> .config
           echo "CONFIG_PACKAGE_luci-proto-amneziawg=y" >> .config
           echo "CONFIG_PACKAGE_luci-i18n-amneziawg-ru=y" >> .config
+          echo "CONFIG_PACKAGE_byedpi=y" >> .config
           
           make defconfig
 
