@@ -2,8 +2,6 @@
 
 #set -x
 
-alias apk="apk --allow-untrusted
-
 #Репозиторий OpenWRT должен быть доступен для установки зависимостей пакета kmod-amneziawg
 check_repo() {
     printf "\033[32;1mChecking OpenWrt repo availability...\033[0m\n"
@@ -55,7 +53,7 @@ install_awg_packages() {
             exit 1
         fi
         
-        apk add "$AWG_DIR/$KMOD_AMNEZIAWG_FILENAME"
+        apk add --allow-untrusted "$AWG_DIR/$KMOD_AMNEZIAWG_FILENAME"
 
         if [ $? -eq 0 ]; then
             echo "kmod-amneziawg installed successfully"
@@ -79,7 +77,7 @@ install_awg_packages() {
             exit 1
         fi
 
-        apk add "$AWG_DIR/$AMNEZIAWG_TOOLS_FILENAME"
+        apk add --allow-untrusted "$AWG_DIR/$AMNEZIAWG_TOOLS_FILENAME"
 
         if [ $? -eq 0 ]; then
             echo "amneziawg-tools installed successfully"
@@ -104,7 +102,7 @@ install_awg_packages() {
             exit 1
         fi
 
-        apk add "$AWG_DIR/$LUCI_AMNEZIAWG_FILENAME"
+        apk add --allow-untrusted "$AWG_DIR/$LUCI_AMNEZIAWG_FILENAME"
 
         if [ $? -eq 0 ]; then
             echo "$LUCI_PACKAGE_NAME installed successfully"
@@ -130,7 +128,7 @@ install_awg_packages() {
 
                 if [ $? -eq 0 ]; then
                     echo "luci-i18n-amneziawg-ru file downloaded successfully"
-                    apk add "$AWG_DIR/$LUCI_I18N_AMNEZIAWG_RU_FILENAME"
+                    apk add --allow-untrusted "$AWG_DIR/$LUCI_I18N_AMNEZIAWG_RU_FILENAME"
                     if [ $? -eq 0 ]; then
                         echo "luci-i18n-amneziawg-ru installed successfully"
                     else
