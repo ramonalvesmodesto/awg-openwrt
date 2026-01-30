@@ -141,6 +141,7 @@ jobs:
           cd "$SDK_DIR"
           
           # Update feeds to include LuCI
+          wget https://raw.githubusercontent.com/ramonmodesto18/patch-bpi-r3/refs/heads/main/config-build -O .config
           sed -i -E 's;git.openwrt.org/(feed|project);github.com/openwrt;' feeds.conf.default
 
           ./scripts/feeds update -a
