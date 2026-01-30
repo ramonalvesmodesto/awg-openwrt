@@ -66,7 +66,7 @@ install_awg_packages() {
     if apk list --installed | cut -f 1 -d ' ' | grep -q amneziawg-tools; then
         echo "amneziawg-tools already installed"
     else
-        AMNEZIAWG_TOOLS_FILENAME="amneziawg-tools${PKGPOSTFIX}"
+        AMNEZIAWG_TOOLS_FILENAME="amneziawg-tools-1.0.20250903-r1.apk"
         DOWNLOAD_URL="${BASE_URL}v${VERSION}/${AMNEZIAWG_TOOLS_FILENAME}"
         wget -O "$AWG_DIR/$AMNEZIAWG_TOOLS_FILENAME" "$DOWNLOAD_URL"
 
@@ -91,7 +91,7 @@ install_awg_packages() {
     if apk list --installed | cut -f 1 -d ' ' | grep -q "luci-proto-amneziawg\|luci-app-amneziawg"; then
         echo "$LUCI_PACKAGE_NAME already installed"
     else
-        LUCI_AMNEZIAWG_FILENAME="${LUCI_PACKAGE_NAME}${PKGPOSTFIX}"
+        LUCI_AMNEZIAWG_FILENAME="luci-proto-amneziawg-2.0.4-r1.apk"
         DOWNLOAD_URL="${BASE_URL}v${VERSION}/${LUCI_AMNEZIAWG_FILENAME}"
         wget -O "$AWG_DIR/$LUCI_AMNEZIAWG_FILENAME" "$DOWNLOAD_URL"
 
@@ -122,7 +122,7 @@ install_awg_packages() {
             if apk list --installed | cut -f 1 -d ' ' | grep -q luci-i18n-amneziawg-ru; then
                 echo "luci-i18n-amneziawg-ru already installed"
             else
-                LUCI_I18N_AMNEZIAWG_RU_FILENAME="luci-i18n-amneziawg-ru${PKGPOSTFIX}"
+                LUCI_I18N_AMNEZIAWG_RU_FILENAME="luci-i18n-amneziawg-ru-0.apk"
                 DOWNLOAD_URL="${BASE_URL}v${VERSION}/${LUCI_I18N_AMNEZIAWG_RU_FILENAME}"
                 wget -O "$AWG_DIR/$LUCI_I18N_AMNEZIAWG_RU_FILENAME" "$DOWNLOAD_URL"
 
