@@ -190,6 +190,10 @@ jobs:
         run: |
           # Find SDK directory
           SDK_DIR=$(find . -maxdepth 1 -name "openwrt-sdk-*" -type d | head -n1)
+
+          echo '------------------------------------------------------'
+          echo $SDK_DIR
+          echo '------------------------------------------------------'
           
           mkdir -p awgrelease
           postfix="v${{ matrix.build_env.tag }}_${{ matrix.build_env.pkgarch}}_${{ matrix.build_env.target}}_${{ matrix.build_env.subtarget}}"
@@ -199,6 +203,11 @@ jobs:
           find "$SDK_DIR/bin/packages/aarch64_cortex-a53/base" -name "luci-proto-amneziawg_*.apk" -exec cp {} awgrelease/luci-proto-amneziawg_${postfix}.apk \; || echo "luci-proto-amneziawg package not found"
           find "$SDK_DIR/bin/packages/aarch64_cortex-a53/base" -name "luci-i18n-amneziawg-ru_*.apk" -exec cp {} awgrelease/luci-i18n-amneziawg-ru_${postfix}.apk \; || echo "luci-i18n-amneziawg-ru package not found"
           find "$SDK_DIR/bin/targets/mediatek/filogic/targets" -name "kmod-amneziawg_*.apk" -exec cp {} awgrelease/kmod-amneziawg_${postfix}.apk \; || echo "kmod-amneziawg package not found"
+
+          cp $SDK_DIR/bin/packages/aarch64_cortex-a53/base/* awgrelease/ \; || echo "amneziawg-tools package not found"
+          cp $SDK_DIR/bin/packages/aarch64_cortex-a53/base/* awgrelease/ \; || echo "luci-proto-amneziawg package not found"
+          cp $SDK_DIR/bin/packages/aarch64_cortex-a53/base/* awgrelease/ \; || echo "luci-i18n-amneziawg-ru package not found"
+          cp $SDK_DIR/bin/targets/mediatek/filogic/targets/* awgrelease/ \; || echo "kmod-amneziawg package not found"
           
           echo "Built packages:"
           ls -la awgrelease/
