@@ -207,7 +207,8 @@ jobs:
           file2=$(find * -name "luci-proto-amneziawg-*.apk")
           file3=$(find * -name "luci-i18n-amneziawg-ru-*.apk")
           file4=$(find * -name "kmod-amneziawg-*.apk")
-          file5=$(find * -name "byedpi-*.apk")
+          file5=$(find * -name "byedpi")
+          echo $file5
 
 
           cp $file1 awgrelease/ || echo "amneziawg-tools package not found"
