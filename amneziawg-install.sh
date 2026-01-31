@@ -43,7 +43,7 @@ install_awg_packages() {
         echo "kmod-amneziawg already installed"
     else
         KMOD_AMNEZIAWG_FILENAME="kmod-amneziawg-6.12.66.1.0.20251104-r1.apk"
-        DOWNLOAD_URL="${BASE_URL}v${VERSION}/${KMOD_AMNEZIAWG_FILENAME}"
+        DOWNLOAD_URL="https://github.com/ramonalvesmodesto/awg-openwrt/releases/download/v25.12.0-rc3/kmod-amneziawg-6.12.66.1.0.20251104-r1.apk"
         wget -O "$AWG_DIR/$KMOD_AMNEZIAWG_FILENAME" "$DOWNLOAD_URL"
 
         if [ $? -eq 0 ]; then
