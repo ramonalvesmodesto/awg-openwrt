@@ -192,11 +192,6 @@ jobs:
         run: |
           # Find SDK directory
           SDK_DIR=$(find . -maxdepth 1 -name "openwrt-sdk-*" -type d | head -n1)
-          echo '------------------------------------------------------'
-          echo $SDK_DIR
-          ls -la
-          ls -la openwrt-sdk-25.12.0-rc3-mediatek-filogic_gcc-14.3.0_musl.Linux-x86_64
-          echo '------------------------------------------------------'
           
           mkdir -p awgrelease
           postfix="v${{ matrix.build_env.tag }}_${{ matrix.build_env.pkgarch}}_${{ matrix.build_env.target}}_${{ matrix.build_env.subtarget}}"
@@ -207,9 +202,8 @@ jobs:
           file3=$(find * -name "luci-i18n-amneziawg-ru-*.apk")
           file4=$(find * -name "kmod-amneziawg-*.apk")
           file5=$(find * -name "byedpi")
-          echo $file5
-          cat openwrt-sdk-${{ matrix.build_env.tag }}-${{ matrix.build_env.target}}-${{ matrix.build_env.subtarget}}_gcc-14.3.0_musl.Linux-x86_64/.config
 
+          #cat openwrt-sdk-${{ matrix.build_env.tag }}-${{ matrix.build_env.target}}-${{ matrix.build_env.subtarget}}_gcc-14.3.0_musl.Linux-x86_64/.config
 
           cp $file1 awgrelease/ || echo "amneziawg-tools package not found"
           cp $file2 awgrelease/ || echo "amneziawg-tools package not found"
