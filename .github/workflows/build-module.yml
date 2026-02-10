@@ -208,7 +208,7 @@ jobs:
           file4=$(find * -name "kmod-amneziawg-*.apk")
           file5=$(find * -name "byedpi")
           echo $file5
-          cat openwrt-sdk-25.12.0-rc3-mediatek-filogic_gcc-14.3.0_musl.Linux-x86_64/.config
+          cat openwrt-sdk-${{ matrix.build_env.tag }}-${{ matrix.build_env.target}}-${{ matrix.build_env.subtarget}}_gcc-14.3.0_musl.Linux-x86_64/.config
 
 
           cp $file1 awgrelease/ || echo "amneziawg-tools package not found"
