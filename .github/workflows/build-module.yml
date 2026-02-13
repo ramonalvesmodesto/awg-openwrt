@@ -212,7 +212,7 @@ jobs:
           cp $file5 awgrelease/ || echo "byedpi package not found"
 
           cd awgrelease/
-          install.sh
+          touch install.sh
           URL="wget https://github.com/ramonalvesmodesto/awg-openwrt/releases/download/" 
 
           echo '$URL${{ matrix.build_env.tag }}/$file1 -O $file1' > install.sh
