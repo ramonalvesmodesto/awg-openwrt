@@ -211,6 +211,23 @@ jobs:
           cp $file4 awgrelease/ || echo "amneziawg-tools package not found"
           cp $file5 awgrelease/ || echo "byedpi package not found"
 
+          cd awgrelease/
+          install.sh
+          URL="wget https://github.com/ramonalvesmodesto/awg-openwrt/releases/download/" 
+
+          echo '$URL${{ matrix.build_env.tag }}/$file1 -O $file1' > install.sh
+          echo '$URL${{ matrix.build_env.tag }}/$file2 -O $file2' >> install.sh
+          echo '$URL${{ matrix.build_env.tag }}/$file3 -O $file3' >> install.sh
+          echo '$URL${{ matrix.build_env.tag }}/$file4 -O $file4' >> install.sh
+          echo '$URL${{ matrix.build_env.tag }}/$file5 -O $file5' >> install.sh
+
+          echo 'apk add --allow-untrusted $file1' >> install.sh
+          echo 'apk add --allow-untrusted $file2' >> install.sh
+          echo 'apk add --allow-untrusted $file3' >> install.sh
+          echo 'apk add --allow-untrusted $file5' >> install.sh
+          echo 'apk add --allow-untrusted $file5' >> install.sh
+          
+
           echo "Built packages:"
           ls -la awgrelease/
 
