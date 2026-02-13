@@ -214,15 +214,15 @@ jobs:
           touch install.sh
           URL="wget https://github.com/ramonalvesmodesto/awg-openwrt/releases/download" 
 
-          echo $URL"/${{ matrix.build_env.tag }}/"${arr[1]} " -O " ${arr[1]} > install.sh
+          echo $URL"/${{ matrix.build_env.tag }}/"${arr[0]} " -O " ${arr[0]} > install.sh
+          echo $URL"/${{ matrix.build_env.tag }}/"${arr[1]} " -O " ${arr[1]} >> install.sh
           echo $URL"/${{ matrix.build_env.tag }}/"${arr[2]} " -O " ${arr[2]} >> install.sh
           echo $URL"/${{ matrix.build_env.tag }}/"${arr[3]} " -O " ${arr[3]} >> install.sh
-          echo $URL"/${{ matrix.build_env.tag }}/"${arr[4]} " -O " ${arr[4]} >> install.sh
           
+          echo "apk add --allow-untrusted " ${arr[0]} >> install.sh
           echo "apk add --allow-untrusted " ${arr[1]} >> install.sh
           echo "apk add --allow-untrusted " ${arr[2]} >> install.sh
           echo "apk add --allow-untrusted " ${arr[3]} >> install.sh
-          echo "apk add --allow-untrusted " ${arr[4]} >> install.sh
 
           cd ..
 
