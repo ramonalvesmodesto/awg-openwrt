@@ -201,7 +201,6 @@ jobs:
           file2=$(find * -name "luci-proto-amneziawg-*.apk")
           file3=$(find * -name "luci-i18n-amneziawg-ru-*.apk")
           file4=$(find * -name "kmod-amneziawg-*.apk")
-          file5=$(find * -name "byedpi")
 
           #cat immortalwrt-sdk-${{ matrix.build_env.tag }}-${{ matrix.build_env.target}}-${{ matrix.build_env.subtarget}}_gcc-14.3.0_musl.Linux-x86_64/.config
 
@@ -209,23 +208,21 @@ jobs:
           cp $file2 awgrelease/ || echo "amneziawg-tools package not found"
           cp $file3 awgrelease/ || echo "amneziawg-tools package not found"
           cp $file4 awgrelease/ || echo "amneziawg-tools package not found"
-          cp $file5 awgrelease/ || echo "byedpi package not found"
 
+          arr=($(ls awgrelease))
           cd awgrelease/
           touch install.sh
           URL="wget https://github.com/ramonalvesmodesto/awg-openwrt/releases/download" 
 
-          echo $URL"/${{ matrix.build_env.tag }}/"$file1 " -O " $file1 > install.sh
-          echo $URL"/${{ matrix.build_env.tag }}/"$file2 " -O " $file2 > install.sh
-          echo $URL"/${{ matrix.build_env.tag }}/"$file3 " -O " $file3 > install.sh
-          echo $URL"/${{ matrix.build_env.tag }}/"$file4 " -O " $file4 > install.sh
-          echo $URL"/${{ matrix.build_env.tag }}/"$file5 " -O " $file5 > install.sh
-
-          echo "apk add --allow-untrusted " $file1 >> install.sh
-          echo "apk add --allow-untrusted " $file2 >> install.sh
-          echo "apk add --allow-untrusted " $file3 >> install.sh
-          echo "apk add --allow-untrusted " $file5 >> install.sh
-          echo "apk add --allow-untrusted " $file5 >> install.sh
+          echo $URL"/${{ matrix.build_env.tag }}/"${arr[1]} " -O " ${arr[1]} > install.sh
+          echo $URL"/${{ matrix.build_env.tag }}/"${arr[2]} " -O " ${arr[2]} >> install.sh
+          echo $URL"/${{ matrix.build_env.tag }}/"${arr[3]} " -O " ${arr[3]} >> install.sh
+          echo $URL"/${{ matrix.build_env.tag }}/"${arr[4]} " -O " ${arr[4]} >> install.sh
+          
+          echo "apk add --allow-untrusted " ${arr[1]} >> install.sh
+          echo "apk add --allow-untrusted " ${arr[2]} >> install.sh
+          echo "apk add --allow-untrusted " ${arr[3]} >> install.sh
+          echo "apk add --allow-untrusted " ${arr[4]} >> install.sh
 
           cd ..
 
