@@ -69,7 +69,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build:
-    name: "v$(echo ${{ matrix.build_env.tag }} | cut -d'/' -f2) - ${{ matrix.build_env.pkgarch}} :: ${{ matrix.build_env.target}}/${{ matrix.build_env.subtarget}} build"
+    name: "v${{ matrix.build_env.tag }} - ${{ matrix.build_env.pkgarch}} :: ${{ matrix.build_env.target}}/${{ matrix.build_env.subtarget}} build"
     runs-on: ubuntu-latest
     needs: generate-config
     strategy:
@@ -90,7 +90,7 @@ jobs:
         id: cache-sdk
         uses: actions/cache@v4
         env:
-          cache-name: "cache-sdk-$(echo ${{ matrix.build_env.tag }} | cut -d'/' -f2)-${{ matrix.build_env.target}}-${{ matrix.build_env.subtarget}}"
+          cache-name: "cache-sdk-${{ matrix.build_env.tag }}-${{ matrix.build_env.target}}-${{ matrix.build_env.subtarget}}"
         with:
           path: openwrt-sdk-*/
           key: ${{ runner.os }}-sdk-${{ env.cache-name }}
@@ -99,16 +99,16 @@ jobs:
         if: steps.cache-sdk.outputs.cache-hit != 'true'
         run: |
           echo "pkgarch: ${{ matrix.build_env.pkgarch}}, target:${{ matrix.build_env.target}}, subtarget: ${{ matrix.build_env.subtarget}}"
-          version=$(echo ${{ matrix.build_env.tag }} | cut -d'/' -f2)
+
           # Get the actual SDK filename from the directory listing
-          SDK_FILE=$(curl -s "https://downloads.openwrt.org/${{ matrix.build_env.tag }}/targets/${{ matrix.build_env.target}}/${{ matrix.build_env.subtarget}}/" | grep -o "openwrt-sdk-$version-${{ matrix.build_env.subtarget}}_gcc-[^\"]*_musl[^\"]*\.Linux-x86_64\.tar\.[xz|zst]*" | head -n1)
+          SDK_FILE=$(curl -s "https://downloads.openwrt.org/releases/${{ matrix.build_env.tag }}/targets/${{ matrix.build_env.target}}/${{ matrix.build_env.subtarget}}/" | grep -o "openwrt-sdk-${{ matrix.build_env.tag }}-${{ matrix.build_env.target}}-${{ matrix.build_env.subtarget}}_gcc-[^\"]*_musl[^\"]*\.Linux-x86_64\.tar\.[xz|zst]*" | head -n1)
           
           if [ -z "$SDK_FILE" ]; then
             echo "SDK file not found for ${{ matrix.build_env.tag }} ${{ matrix.build_env.target}} ${{ matrix.build_env.subtarget}}"
             exit 1
           fi
           
-          SDK_DOWNLOAD_URL="https://downloads.openwrt.org/${{ matrix.build_env.tag }}/targets/${{ matrix.build_env.target}}/${{ matrix.build_env.subtarget}}/${SDK_FILE}"
+          SDK_DOWNLOAD_URL="https://downloads.openwrt.org/releases/${{ matrix.build_env.tag }}/targets/${{ matrix.build_env.target}}/${{ matrix.build_env.subtarget}}/${SDK_FILE}"
           echo "Downloading SDK: $SDK_DOWNLOAD_URL"
           
           wget "$SDK_DOWNLOAD_URL"
@@ -141,7 +141,7 @@ jobs:
           cd "$SDK_DIR"
           
           # Update feeds to include LuCI
-          #sed -i -E 's;git.openwrt.org/(feed|project);github.com/openwrt;' feeds.conf.default
+          sed -i -E 's;git.openwrt.org/(feed|project);github.com/openwrt;' feeds.conf.default
 
           ./scripts/feeds update -a
           ./scripts/feeds install -a
@@ -194,7 +194,7 @@ jobs:
           SDK_DIR=$(find . -maxdepth 1 -name "openwrt-sdk-*" -type d | head -n1)
           
           mkdir -p awgrelease
-          postfix="v$(echo ${{ matrix.build_env.tag }} | cut -d'/' -f2)_${{ matrix.build_env.pkgarch}}_${{ matrix.build_env.target}}_${{ matrix.build_env.subtarget}}"
+          postfix="v${{ matrix.build_env.tag }}_${{ matrix.build_env.pkgarch}}_${{ matrix.build_env.target}}_${{ matrix.build_env.subtarget}}"
           
           # Copy built packages
           file1=$(find * -name "amneziawg-tools-*.apk") 
@@ -202,29 +202,10 @@ jobs:
           file3=$(find * -name "luci-i18n-amneziawg-ru-*.apk")
           file4=$(find * -name "kmod-amneziawg-*.apk")
 
-          #cat openwrt-sdk-${{ matrix.build_env.tag }}-${{ matrix.build_env.target}}-${{ matrix.build_env.subtarget}}_gcc-14.3.0_musl.Linux-x86_64/.config
-
           cp $file1 awgrelease/ || echo "amneziawg-tools package not found"
           cp $file2 awgrelease/ || echo "amneziawg-tools package not found"
           cp $file3 awgrelease/ || echo "amneziawg-tools package not found"
           cp $file4 awgrelease/ || echo "amneziawg-tools package not found"
-
-          arr=($(ls awgrelease))
-          cd awgrelease/
-          touch install.sh
-          URL="wget https://github.com/ramonalvesmodesto/awg-openwrt/releases/download" 
-
-          echo $URL"/v$(echo ${{ matrix.build_env.tag }} | cut -d'/' -f2)/"${arr[0]} " -O " ${arr[0]} > install.sh
-          echo $URL"/v$(echo ${{ matrix.build_env.tag }} | cut -d'/' -f2)/"${arr[1]} " -O " ${arr[1]} >> install.sh
-          echo $URL"/v$(echo ${{ matrix.build_env.tag }} | cut -d'/' -f2)/"${arr[2]} " -O " ${arr[2]} >> install.sh
-          echo $URL"/v$(echo ${{ matrix.build_env.tag }} | cut -d'/' -f2)/"${arr[3]} " -O " ${arr[3]} >> install.sh
-          
-          echo "apk add --allow-untrusted " ${arr[0]} >> install.sh
-          echo "apk add --allow-untrusted " ${arr[1]} >> install.sh
-          echo "apk add --allow-untrusted " ${arr[2]} >> install.sh
-          echo "apk add --allow-untrusted " ${arr[3]} >> install.sh
-
-          cd ..
 
           echo "Built packages:"
           ls -la awgrelease/
